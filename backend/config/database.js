@@ -1,8 +1,6 @@
-// config/database.js
 // This file sets up ONE connection pool that the rest of the app reuses.
-// A "pool" is a small group of ready-to-use connections, instead of
-// opening a brand new connection to MySQL on every single request
-// (which would be slow and can exhaust MySQL's max connections).
+// A "pool" is a small group of ready-to-use connections, instead of opening a brand new connection
+// to MySQL on every single request which would be slow and can exhaust MySQL's max connections.
 
 require('dotenv').config(); // loads the values from .env into process.env
 

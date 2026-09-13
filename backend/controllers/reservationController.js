@@ -1,9 +1,6 @@
-// controllers/reservationController.js
 // This file's job: receive the HTTP request (req), call the right
-// model function, and send back the HTTP response (res) with the
-// right status code. It should NOT contain raw SQL — that's the
-// model's job. Keeping this separation is what the rubric is
-// checking for under "Controllers" and "Models/database logic".
+// model function and send back the HTTP response (res) with the
+// right status code. It should NOT contain raw SQL.
 
 const reservationModel = require('../models/reservationModel');
 
@@ -14,9 +11,9 @@ async function getAllReservations(req, res) {
     res.status(200).json(reservations);
   } catch (err) {
     // 500 = something broke on our end (DB error, bug, etc.)
-    // We never expose err.message details like DB credentials to the
-    // client in a real production app, but for a student project it's
-    // fine and helps you debug from Swagger/Postman directly.
+    // Never expose err.message details like DB credentials to the
+    // client in a real production app but for a student project it's
+    // okay and helps us debug from Swagger/Postman directly.
     res.status(500).json({ message: 'Failed to fetch reservations', error: err.message });
   }
 }

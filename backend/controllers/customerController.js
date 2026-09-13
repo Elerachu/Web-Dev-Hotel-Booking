@@ -1,4 +1,3 @@
-// controllers/customerController.js
 const customerModel = require('../models/customerModel');
 
 async function getAllCustomers(req, res) {
@@ -64,9 +63,8 @@ async function deleteCustomer(req, res) {
     if (affectedRows === 0) {
       return res.status(404).json({ message: 'Customer not found' });
     }
-    // Reminder: deleting a customer also deletes their reservations,
-    // because of ON DELETE CASCADE in the schema. Worth knowing when
-    // you demo this — it's a deliberate design choice, not a bug.
+    // N/B: deleting a customer also deletes their reservations,
+    // because of ON DELETE CASCADE in the schema.
     res.status(200).json({ message: 'Customer deleted' });
   } catch (err) {
     res.status(500).json({ message: 'Failed to delete customer', error: err.message });
