@@ -8,6 +8,7 @@ const cors = require('cors');
 const customerRoutes = require('./routes/customerRoutes');
 
 const reservationRoutes = require('./routes/reservationRoutes');
+const tableRoutes = require('./routes/tableRoutes');
 // Once Acher/you add customers and restaurant_tables, they'll be
 // require'd and mounted here too, following the exact same pattern.
 
@@ -25,6 +26,7 @@ app.use(express.json());// parses incoming JSON request bodies into req.body
 // Everything inside reservationRoutes.js is now prefixed with this path.
 app.use('/api/reservations', reservationRoutes);
 app.use('/api/customers', customerRoutes);
+app.use('/api/tables', tableRoutes);
 
 // Simple root route, just so visiting http://localhost:3000 shows
 // something other than "Cannot GET /"
