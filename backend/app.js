@@ -4,9 +4,13 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+
 const customerRoutes = require('./routes/customerRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
 const tableRoutes = require('./routes/tableRoutes');
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./swagger/swagger');
 
 const app = express();
 
@@ -20,6 +24,8 @@ app.use(express.json());// parses incoming JSON request bodies into req.body wit
 app.use('/api/reservations', reservationRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/tables', tableRoutes);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Simple root route, just so visiting http://localhost:3000 shows
 
