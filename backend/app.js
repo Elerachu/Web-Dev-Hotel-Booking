@@ -6,7 +6,7 @@ const express = require('express');
 const cors = require('cors');
 
 const guestRoutes = require('./routes/guestRoutes');
-const reservationRoutes = require('./routes/reservationRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
 const roomRoutes = require('./routes/roomRoutes');
 
 const swaggerUi = require('swagger-ui-express');
@@ -21,7 +21,7 @@ app.use(express.json());// parses incoming JSON request bodies into req.body wit
 // req.body would be undefined in your controller's createReservation/updateReservation functions
 
 // --- Routes ---
-app.use('/api/reservations', reservationRoutes);
+app.use('/api/bookings', bookingRoutes);
 app.use('/api/guests', guestRoutes);
 app.use('/api/rooms', roomRoutes);
 
