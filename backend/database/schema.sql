@@ -1,31 +1,33 @@
--- Restaurant Reservation Management System schema
-CREATE DATABASE IF NOT EXISTS restaurant_db;
-USE restaurant_db;
+-- Hotel Room Booking Management System schema
+CREATE DATABASE IF NOT EXISTS hotel_db;
+USE hotel_db;
 
-CREATE TABLE customers (
-    customer_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    phone VARCHAR(20) NOT NULL,
-    email VARCHAR(100) UNIQUE
+CREATE TABLE guests (
+                        guest_id INT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(100) NOT NULL,
+                        email VARCHAR(100) UNIQUE,
+                        phone VARCHAR(20) NOT NULL,
+                        passport_number VARCHAR(30) NOT NULL UNIQUE
 );
 
-CREATE TABLE restaurant_tables (
-    table_id INT AUTO_INCREMENT PRIMARY KEY,
-    table_number INT NOT NULL UNIQUE,
-    capacity INT NOT NULL,
-    status ENUM('available', 'occupied', 'reserved') DEFAULT 'available'
+CREATE TABLE rooms (
+                       room_id INT AUTO_INCREMENT PRIMARY KEY,
+                       room_number INT NOT NULL UNIQUE,
+                       room_type VARCHAR(50) NOT NULL,
+                       price_per_night DECIMAL(10,2) NOT NULL,
+                       status ENUM('available', 'occupied', 'maintenance') DEFAULT 'available'
 );
 
-CREATE TABLE reservations (
-    reservation_id INT AUTO_INCREMENT PRIMARY KEY,
-    customer_id INT NOT NULL,
-    table_id INT NOT NULL,
-    reservation_date DATE NOT NULL,
-    reservation_time TIME NOT NULL,
-    number_of_people INT NOT NULL,
-    status ENUM('pending', 'confirmed', 'cancelled') DEFAULT 'pending',
-    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
-        ON DELETE CASCADE,
-    FOREIGN KEY (table_id) REFERENCES restaurant_tables(table_id)
-        ON DELETE CASCADE
+CREATE TABLE bookings (
+                          booking_id INT AUTO_INCREMENT PRIMARY KEY,
+                          guest_id INT NOT NULL,
+                          room_id INT NOT NULL,
+                          check_in_date DATE NOT NULL,
+                          check_out_date DATE NOT NULL,
+                          total_price DECIMAL(10,2) NOT NULL,
+                          status ENUM('pending', 'checked_in', 'checked_out', 'cancelled') DEFAULT 'pending',
+                          FOREIGN KEY (guest_id) REFERENCES guests(guest_id)
+                              ON DELETE CASCADE,
+                          FOREIGN KEY (room_id) REFERENCES rooms(room_id)
+                              ON DELETE CASCADE
 );

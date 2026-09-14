@@ -5,7 +5,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 
-const customerRoutes = require('./routes/customerRoutes');
+const guestRoutes = require('./routes/guestRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
 const tableRoutes = require('./routes/tableRoutes');
 
@@ -22,7 +22,7 @@ app.use(express.json());// parses incoming JSON request bodies into req.body wit
 
 // --- Routes ---
 app.use('/api/reservations', reservationRoutes);
-app.use('/api/customers', customerRoutes);
+app.use('/api/guests', guestRoutes);
 app.use('/api/tables', tableRoutes);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
