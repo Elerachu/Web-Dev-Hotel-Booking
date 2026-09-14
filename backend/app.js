@@ -7,7 +7,7 @@ const cors = require('cors');
 
 const guestRoutes = require('./routes/guestRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
-const tableRoutes = require('./routes/tableRoutes');
+const roomRoutes = require('./routes/roomRoutes');
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger/swagger');
@@ -23,7 +23,7 @@ app.use(express.json());// parses incoming JSON request bodies into req.body wit
 // --- Routes ---
 app.use('/api/reservations', reservationRoutes);
 app.use('/api/guests', guestRoutes);
-app.use('/api/tables', tableRoutes);
+app.use('/api/rooms', roomRoutes);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
