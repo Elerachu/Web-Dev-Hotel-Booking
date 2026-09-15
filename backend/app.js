@@ -16,6 +16,10 @@ const app = express();
 
 app.use(cors());// allows the React app (different port) to call this API
 app.use(express.json());
+// sign that the api is running
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'Hotel Booking API is running. See /api-docs for documentation.' });
+});
 
 // Health check for confirming the server + DB are both up
 app.get('/api/health', (req, res) => {
