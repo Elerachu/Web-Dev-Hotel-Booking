@@ -9,9 +9,9 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Restaurant Reservation API',
+      title: 'Hotel Booking Management System API',
       version: '1.0.0',
-      description: 'REST API for managing customers, restaurant tables, and reservations'
+      description: 'REST API for managing guests, rooms, and bookings for a small hotel.'
     },
     servers: [
       {
@@ -20,9 +20,7 @@ const options = {
       }
     ]
   },
-  // This tells swagger-jsdoc: "scan every .js file inside routes/
-  // and look for specially-formatted comments above each route."
-  // We write those comments next.
+  // Path(s) to files containing the @swagger annotations
   apis: ['./routes/*.js']
 };
 

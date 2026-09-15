@@ -59,7 +59,39 @@ router.get('/', bookingController.getAllBookings);
  *       404:
  *         description: Booking not found
  */
+/**
+ * @swagger
+ * /api/bookings/details:
+ *   get:
+ *     summary: Get all bookings, with the guest's name and room number included
+ *     tags: [Bookings]
+ *     responses:
+ *       200:
+ *         description: A list of bookings including guest_name and room_number
+ */
+router.get('/details', bookingController.getAllBookingsWithDetails);
+
 router.get('/:id', bookingController.getBookingById);
+
+/**
+ * @swagger
+ * /api/bookings/{id}/details:
+ *   get:
+ *     summary: Get a single booking, with the guest's name and room number included
+ *     tags: [Bookings]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: The booking including guest_name and room_number
+ *       404:
+ *         description: Booking not found
+ */
+router.get('/:id/details', bookingController.getBookingByIdWithDetails);
 
 /**
  * @swagger
