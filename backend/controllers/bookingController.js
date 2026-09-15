@@ -107,6 +107,8 @@ async function deleteBooking(req, res) {
 module.exports = {
   getAllBookings,
   getBookingById,
+  getAllBookingsWithDetails,
+  getBookingByIdWithDetails,
   createBooking,
   updateBooking,
   deleteBooking

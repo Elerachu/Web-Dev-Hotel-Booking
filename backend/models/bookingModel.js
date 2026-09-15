@@ -91,6 +91,8 @@ async function deleteBooking(id) {
 module.exports = {
   getAllBookings,
   getBookingById,
+  getAllBookingsWithDetails,
+  getBookingByIdWithDetails,
   createBooking,
   updateBooking,
   deleteBooking
