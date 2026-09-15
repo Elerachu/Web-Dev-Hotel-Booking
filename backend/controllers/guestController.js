@@ -33,8 +33,7 @@ async function createGuest(req, res) {
     const newId = await guestModel.createGuest(req.body);
     res.status(201).json({ message: 'Guest created', guest_id: newId });
   } catch (err) {
-    // Both email and passport_number are UNIQUE in the schema, so
-    // either one could trigger this same MySQL error code.
+    // checks if the email or passport is a duplicate
     if (err.code === 'ER_DUP_ENTRY') {
       return res.status(400).json({ message: 'A guest with that email or passport number already exists' });
     }
@@ -64,7 +63,6 @@ async function deleteGuest(req, res) {
       return res.status(404).json({ message: 'Guest not found' });
     }
     // Deleting a guest cascades to delete their bookings too,
-    // same ON DELETE CASCADE pattern as before.
     res.status(200).json({ message: 'Guest deleted' });
   } catch (err) {
     res.status(500).json({ message: 'Failed to delete guest', error: err.message });
