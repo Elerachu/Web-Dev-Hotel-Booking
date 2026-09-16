@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+/*
+  Design tokens. Tailwind turns each --color-* below into classes,
+  e.g. --color-lagoon-900 gives bg-lagoon-900, text-lagoon-900, border-lagoon-900.
+
+  ink     = the dark navy from the original design: buttons, avatar, headings ("do something")
+  lagoon  = the secondary colour: sidebar, focus rings, revenue chart ("where you are")
+  Status colours (green / amber / red / grey) stay reserved for status badges only.
+*/
+@theme {
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink: #0f172a;
+
+  --color-lagoon-50: #edf7f6;
+  --color-lagoon-100: #d3ecea;
+  --color-lagoon-200: #a8d9d5;
+  --color-lagoon-300: #72bfb9;
+  --color-lagoon-400: #3fa29b;
+  --color-lagoon-500: #22857f;
+  --color-lagoon-600: #176b67;
+  --color-lagoon-700: #135654;
+  --color-lagoon-800: #114645;
+  --color-lagoon-900: #0f3a3a;
+  --color-lagoon-950: #072424;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-white text-ink antialiased;
+  }
+}
+
+/* numbers line up in tables and stat cards */
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}

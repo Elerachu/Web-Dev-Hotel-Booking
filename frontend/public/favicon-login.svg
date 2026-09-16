@@ -1,0 +1,6 @@
+<!-- PLACEHOLDER favicon for the admin login page. Replace this file with your own icon (keep the name favicon-login.svg). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#0F172A"/>
+  <circle cx="24" cy="32" r="9" fill="none" stroke="#72BFB9" stroke-width="5"/>
+  <path d="M33 32h19M46 32v7M52 32v5" stroke="#72BFB9" stroke-width="5" stroke-linecap="round"/>
+</svg>
