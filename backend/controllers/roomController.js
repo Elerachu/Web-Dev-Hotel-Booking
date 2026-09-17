@@ -4,9 +4,14 @@ const roomModel = require('../models/roomModel');
 // Matches the schema's ENUM for rooms.status
 const VALID_STATUSES = ['available', 'occupied', 'maintenance'];
 
+// GET /api/rooms?status=...  -> only rooms with that status
 async function getAllRooms(req, res) {
   try {
-    const rooms = await roomModel.getAllRooms();
+    const { status } = req.query;
+    if (status && !VALID_STATUSES.includes(status)) {
+      return res.status(400).json({ message: `status must be one of: ${VALID_STATUSES.join(', ')}` });
+    }
+    const rooms = await roomModel.getAllRooms(status);
     res.status(200).json(rooms);
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch rooms', error: err.message });

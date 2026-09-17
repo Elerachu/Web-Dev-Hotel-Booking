@@ -27,11 +27,20 @@ const roomController = require('../controllers/roomController');
  * @swagger
  * /api/rooms:
  *   get:
- *     summary: Get all rooms
+ *     summary: Get all rooms, optionally filtered by status
  *     tags: [Rooms]
+ *     parameters:
+ *       - in: query
+ *         name: status
+ *         required: false
+ *         schema:
+ *           type: string
+ *           enum: [available, occupied, maintenance]
  *     responses:
  *       200:
  *         description: A list of rooms
+ *       400:
+ *         description: Invalid status value
  */
 router.get('/', roomController.getAllRooms);
 
