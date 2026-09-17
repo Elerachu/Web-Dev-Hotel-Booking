@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--
+      FAVICON PLACEHOLDERS - replace the two files in /public with your own icons.
+        /public/favicon-login.svg  -> shown on the admin login page
+        /public/favicon.svg        -> shown on the dashboard and every page after login
+      src/hooks/usePageMeta.js swaps between them when the page changes.
+      Keep id="favicon" on this tag, that is how the hook finds it.
+    -->
+    <link id="favicon" rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Hotel admin</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

@@ -1,8 +1,23 @@
 // controllers/bookingController.js
 const bookingModel = require('../models/bookingModel');
+const roomModel = require('../models/roomModel');
 
 // Matches the schema's ENUM for bookings.status
 const VALID_STATUSES = ['pending', 'checked_in', 'checked_out', 'cancelled'];
+
+// function to keep booking and room status in sync
+async function syncRoomStatus(previous, next) {
+  const wasInHouse = previous && previous.status === 'checked_in';
+  const isInHouse = next && next.status === 'checked_in';
+  const roomChanged = previous && next && Number(previous.room_id) !== Number(next.room_id);
+
+  if (wasInHouse && (!isInHouse || roomChanged)) {
+    await roomModel.setRoomStatus(previous.room_id, 'available', 'occupied');
+  }
+  if (isInHouse) {
+    await roomModel.setRoomStatus(next.room_id, 'occupied');
+  }
+}
 
 async function getAllBookings(req, res) {
   try {
@@ -48,56 +63,118 @@ async function getBookingByIdWithDetails(req, res) {
 
 async function createBooking(req, res) {
   try {
-    const { guest_id, room_id, check_in_date, check_out_date, total_price } = req.body;
+    const { guest_id, room_id, check_in_date, check_out_date, total_price, status } =
+      req.body;
 
-    if (!guest_id || !room_id || !check_in_date || !check_out_date || !total_price) {
-      return res.status(400).json({ message: 'Missing required booking fields' });
+    if (!guest_id || !room_id || !check_in_date || !check_out_date || total_price == null) {
+      return res.status(400).json({
+        message:
+          'guest_id, room_id, check_in_date, check_out_date and total_price are required'
+      });
     }
-    if (total_price <= 0) {
-      return res.status(400).json({ message: 'total_price must be greater than 0' });
-    }
-
     if (new Date(check_out_date) <= new Date(check_in_date)) {
-      return res.status(400).json({ message: 'check_out_date must be after check_in_date' });
+      return res
+        .status(400)
+        .json({ message: 'check_out_date must be after check_in_date' });
     }
-    if (req.body.status && !VALID_STATUSES.includes(req.body.status)) {
-      return res.status(400).json({ message: `status must be one of: ${VALID_STATUSES.join(', ')}` });
+    if (status && !VALID_STATUSES.includes(status)) {
+      return res
+        .status(400)
+        .json({ message: `status must be one of: ${VALID_STATUSES.join(', ')}` });
     }
 
-    const newId = await bookingModel.createBooking(req.body);
-    res.status(201).json({ message: 'Booking created', booking_id: newId });
+    const newId = await bookingModel.createBooking({
+      guest_id,
+      room_id,
+      check_in_date,
+      check_out_date,
+      total_price,
+      status
+    });
+
+    await syncRoomStatus(null, { room_id, status });
+
+    const created = await bookingModel.getBookingByIdWithDetails(newId);
+    res.status(201).json(created);
   } catch (err) {
-    res.status(500).json({ message: 'Failed to create booking', error: err.message });
+    if (err.code === 'ER_NO_REFERENCED_ROW_2' || err.code === 'ER_NO_REFERENCED_ROW') {
+      return res
+        .status(400)
+        .json({ message: 'guest_id or room_id does not refer to an existing record' });
+    }
+    console.error('createBooking error:', err);
+    res.status(500).json({ message: 'Failed to create booking' });
   }
 }
 
+
 async function updateBooking(req, res) {
   try {
-    const { status, check_in_date, check_out_date } = req.body;
+    const { guest_id, room_id, check_in_date, check_out_date, total_price, status } =
+      req.body;
 
-    if (status && !VALID_STATUSES.includes(status)) {
-      return res.status(400).json({ message: `status must be one of: ${VALID_STATUSES.join(', ')}` });
+    if (
+      !guest_id ||
+      !room_id ||
+      !check_in_date ||
+      !check_out_date ||
+      total_price == null ||
+      !status
+    ) {
+      return res.status(400).json({
+        message:
+          'guest_id, room_id, check_in_date, check_out_date, total_price and status are required'
+      });
     }
-    if (check_in_date && check_out_date && new Date(check_out_date) <= new Date(check_in_date)) {
-      return res.status(400).json({ message: 'check_out_date must be after check_in_date' });
+    if (new Date(check_out_date) <= new Date(check_in_date)) {
+      return res
+        .status(400)
+        .json({ message: 'check_out_date must be after check_in_date' });
+    }
+    if (!VALID_STATUSES.includes(status)) {
+      return res
+        .status(400)
+        .json({ message: `status must be one of: ${VALID_STATUSES.join(', ')}` });
     }
 
-    const affectedRows = await bookingModel.updateBooking(req.params.id, req.body);
-    if (affectedRows === 0) {
+    // read the booking before changing it, so we know which room it was in and its old status
+    const previous = await bookingModel.getBookingById(req.params.id);
+    if (!previous) {
       return res.status(404).json({ message: 'Booking not found' });
     }
-    res.status(200).json({ message: 'Booking updated' });
+
+    await bookingModel.updateBooking(req.params.id, {
+      guest_id,
+      room_id,
+      check_in_date,
+      check_out_date,
+      total_price,
+      status
+    });
+
+    await syncRoomStatus(previous, { room_id, status });
+
+    const updated = await bookingModel.getBookingByIdWithDetails(req.params.id);
+    res.status(200).json(updated);
   } catch (err) {
-    res.status(500).json({ message: 'Failed to update booking', error: err.message });
+    if (err.code === 'ER_NO_REFERENCED_ROW_2' || err.code === 'ER_NO_REFERENCED_ROW') {
+      return res
+        .status(400)
+        .json({ message: 'guest_id or room_id does not refer to an existing record' });
+    }
+    console.error('updateBooking error:', err);
+    res.status(500).json({ message: 'Failed to update booking' });
   }
 }
 
 async function deleteBooking(req, res) {
   try {
-    const affectedRows = await bookingModel.deleteBooking(req.params.id);
-    if (affectedRows === 0) {
+    const previous = await bookingModel.getBookingById(req.params.id);
+    if (!previous) {
       return res.status(404).json({ message: 'Booking not found' });
     }
+    await bookingModel.deleteBooking(req.params.id);
+    await syncRoomStatus(previous, null);
     res.status(200).json({ message: 'Booking deleted' });
   } catch (err) {
     res.status(500).json({ message: 'Failed to delete booking', error: err.message });

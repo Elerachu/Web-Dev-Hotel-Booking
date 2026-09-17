@@ -1,0 +1,5 @@
+<!-- PLACEHOLDER favicon for the dashboard pages. Replace this file with your own icon (keep the name favicon.svg). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#0F3A3A"/>
+  <path d="M20 16v32M44 16v32M20 32h24" stroke="#D3ECEA" stroke-width="6" stroke-linecap="round"/>
+</svg>
