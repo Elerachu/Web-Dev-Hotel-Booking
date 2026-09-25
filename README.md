@@ -495,5 +495,8 @@ erDiagram
   - `/revenue`
 - **Loading speed:** the Revenue page, and its charting library, is only downloaded when someone opens it. This keeps the first load faster.
 
+## Demo-Video Link
+[https://drive.google.com/drive/folders/1T4OKFvPB0LEanGOfyG0WbQB8eA-NdY10](url)
+
 
 
